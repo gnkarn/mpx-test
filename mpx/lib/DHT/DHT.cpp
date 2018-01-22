@@ -67,7 +67,7 @@ boolean DHT::read(bool force) {
   }
   _lastreadtime = currenttime;
 
-  // Reset 40 bits of received data to zero.
+  // Reset 32 bits of received data to zero.
   data[0] = data[1]  = 0;
 
   // Send start signal.  See DHT datasheet for full signal diagram:
@@ -110,10 +110,10 @@ boolean DHT::read(bool force) {
       return _lastresult;
     }
 
-    // Now read the 16 bits sent by the sensor.  Each bit is sent as a 50
-    // microsecond low pulse followed by a variable length high pulse.  If the
-    // high pulse is ~28 microseconds then it's a 0 and if it's ~70 microseconds
-    // then it's a 1.  We measure the cycle count of the initial 50us low pulse
+    // Now read the 16 bits sent by the sensor.  Each bit is sent as a 2
+    // milisecond low pulse followed by a variable length high pulse.  If the
+    // high pulse is ~2 ms then it's a 0 and if it's ~3 ms
+    // then it's a 1.  We measure the cycle count of the initial 2ms low pulse
     // and use that to compare to the cycle count of the high pulse to determine
     // if the bit is a 0 (high state cycle count < low state cycle count), or a
     // 1 (high state cycle count > low state cycle count). Note that for speed all

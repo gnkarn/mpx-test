@@ -8,10 +8,10 @@
 // Depends on the following Arduino libraries:
 // - Adafruit Unified Sensor Library: https://github.com/adafruit/Adafruit_Sensor
 // - DHT Sensor Library: https://github.com/adafruit/DHT-sensor-library
-
-#include </Users/Gus-nuevo/Documents/platformio/Projects/mpx/lib/Adafruit Sensor/Adafruit_Sensor.h>
-#include </Users/Gus-nuevo/Documents/platformio/Projects/mpx/lib/DHT/DHT.h>
-#include </Users/Gus-nuevo/Documents/platformio/Projects/mpx/lib/DHT_U/DHT_U.h>
+// published on https://github.com/gnkarn/mpx-test/tree/master/mpx
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
 
 #define DHTPIN            2         // Pin which is connected to the DHT sensor.
 
