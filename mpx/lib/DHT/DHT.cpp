@@ -6,7 +6,7 @@ written by Adafruit Industries
 
 #include "DHT.h"
 
-#define MIN_INTERVAL 2000
+#define MIN_INTERVAL 100  // antes 2000
 
 DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
   _pin = pin;
@@ -15,7 +15,7 @@ DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
     _bit = digitalPinToBitMask(pin);
     _port = digitalPinToPort(pin);
   #endif
-  _maxcycles = 2*microsecondsToClockCycles(1000);  // 1 millisecond timeout for
+  _maxcycles = 4*microsecondsToClockCycles(1000);  // 1 millisecond timeout for
                                                  // reading pulses from DHT sensor.
   // Note that count is now ignored as the DHT reading algorithm adjusts itself
   // basd on the speed of the processor.
@@ -43,6 +43,8 @@ float DHT::readTemperature(bool S, bool force) {
       break;
     case DHT22:
     f = data[0]+data[1];
+    DEBUG_PRINT(data[0], HEX); DEBUG_PRINT(F(", "));
+    DEBUG_PRINT(data[1], HEX); DEBUG_PRINTLN(F(", "));
     break;
     }
   }
@@ -62,7 +64,7 @@ boolean DHT::read(bool force) {
   // Check if sensor was read less than two seconds ago and return early
   // to use last reading.
   uint32_t currenttime = millis();
-  if (!force && ((currenttime - _lastreadtime) < 2000)) {
+  if (!force && ((currenttime - _lastreadtime) < 100)) {
     return _lastresult; // return last correct measurement
   }
   _lastreadtime = currenttime;
@@ -75,13 +77,13 @@ boolean DHT::read(bool force) {
 
   // Go into high impedence state to let pull-up raise data line level and
   // start the reading process.
-  digitalWrite(_pin, HIGH);
-  delay(250);
+  //digitalWrite(_pin, HIGH); // debug gnk
+  //delay(15); // debug gnk
 
   // First set data line low for 20 milliseconds.
-  pinMode(_pin, OUTPUT);
-  digitalWrite(_pin, LOW);
-  delay(20);
+  //pinMode(_pin, OUTPUT); // esta bueno para generar un pulso periodico y verlo en el osc
+  //digitalWrite(_pin, LOW);
+  //delay(10); // gnk debug
 
   uint32_t cycles[32];
   {
@@ -90,8 +92,8 @@ boolean DHT::read(bool force) {
     InterruptLock lock;
 
     // End the start signal by setting data line high for 40 microseconds.
-    digitalWrite(_pin, HIGH);
-    delayMicroseconds(40);
+  //  digitalWrite(_pin, HIGH); // gnk debug
+  //  delayMicroseconds(40); // gnk debug
 
     // Now start reading the data line to get the value from the DHT sensor.
     pinMode(_pin, INPUT_PULLUP);
@@ -100,7 +102,7 @@ boolean DHT::read(bool force) {
     // First expect a low signal for ~80 microseconds followed by a high signal
     // for ~80 microseconds again.
     if (expectPulse(LOW) == 0) {
-      DEBUG_PRINTLN(F("Timeout waiting for start signal low pulse."));
+      //DEBUG_PRINTLN(F("Timeout waiting for start signal low pulse.")); // lo saco para que no llene la pantalla
       _lastresult = false;
       return _lastresult;
     }
@@ -121,6 +123,7 @@ boolean DHT::read(bool force) {
     for (int i=0; i<32; i+=2) {
       cycles[i]   = expectPulse(LOW);
       cycles[i+1] = expectPulse(HIGH);
+
     }
   } // Timing critical code is now complete.
 
@@ -139,10 +142,13 @@ boolean DHT::read(bool force) {
     if (highCycles > lowCycles) {
       // High cycles are greater than 50us low cycle count, must be a 1.
       data[i/8] |= 1;
+      DEBUG_PRINT(1); // debug gnk
     }
     // Else high cycles are less than (or equal to, a weird case) the 50us low
     // cycle count so this must be a zero.  Nothing needs to be changed in the
     // stored data.
+    DEBUG_PRINT(0); // debug gnk
+
   }
 
   DEBUG_PRINTLN(F("Received:"));
@@ -178,6 +184,7 @@ uint32_t DHT::expectPulse(bool level) {
       }
     }
   #endif
+// DEBUG_PRINT(F("count: "));DEBUG_PRINTLN(count);
 
   return count;
 }

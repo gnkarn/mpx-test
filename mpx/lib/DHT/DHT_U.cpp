@@ -61,7 +61,7 @@ void DHT_Unified::setMinDelay(sensor_t* sensor) {
       sensor->min_delay = 2000000L;  // 2 seconds (in microseconds)
       break;
     case DHT22:
-      sensor->min_delay = 2000000L;  // 2 seconds (in microseconds)
+      sensor->min_delay = 100000L;  // 100 ms (in microseconds) para mpx
       break;
     default:
       // Default to slowest sample rate in case of unknown type.

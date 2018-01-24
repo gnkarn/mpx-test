@@ -14,7 +14,7 @@
 #include <DHT_U.h>
 
 #define DHTPIN            2         // Pin which is connected to the DHT sensor.
-
+#define LEDPIN 13
 // Uncomment the type of sensor in use:
 //#define DHTTYPE           DHT11     // DHT 11
 #define DHTTYPE           DHT22     // DHT 22 (AM2302)
@@ -51,16 +51,18 @@ void setup() {
 
 void loop() {
   // Delay between measurements.
+  digitalWrite(LEDPIN, HIGH);//gnk visual indicator that signal received
   delay(delayMS);
   // Get temperature event and print its value.
   sensors_event_t event;
   dht.temperature().getEvent(&event);
   if (isnan(event.temperature)) {
-    Serial.println("Error reading temperature!");
+    //Serial.println("Error reading temperature!"); // lo saco para q no llene la pantalla
   }
   else {
     Serial.print("Temperature: ");
     Serial.print(event.temperature);
     Serial.println(" *C");
   }
+  digitalWrite(LEDPIN, LOW);//gnk end of visual indicator, for this time
 }
