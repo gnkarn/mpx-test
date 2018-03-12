@@ -333,12 +333,12 @@ PROGMEM const char* const custom_reset_string[] = {
 #define WIFI_SCAN_NETWORKS      1           // Perform a network scan before connecting
 
 // Optional hardcoded configuration (up to 2 different networks)
-#define WIFI1_SSID              "WIFIgusPb"
-#define WIFI1_PASS              "A3263C0AA0"
-#define WIFI1_IP                "192.168.0.21"
-#define WIFI1_GW                "192.168.0.1"
+#define WIFI1_SSID              "WIFIxxx"
+#define WIFI1_PASS              ""
+#define WIFI1_IP                "192.168.0.xx"
+#define WIFI1_GW                "192.168.0.x"
 #define WIFI1_MASK              "255.255.255.0"
-#define WIFI1_DNS               "192.168.0.1"
+#define WIFI1_DNS               "192.168.0.x"
 //#define WIFI2_SSID              "..."
 //#define WIFI2_PASS              "..."
 
